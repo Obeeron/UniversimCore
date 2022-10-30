@@ -142,25 +142,25 @@ aliases: univ, uvs
 
 Supports tab completion for sub-commands and universim items.
 
-### Reload
+### /universim reload
 
 > Usage: /universim reload
 
 Reloads the universim plugin and its configuration files.
 
-### Give
+### /universim give
 
 > Usage: /universim give <universimId> [amount]
 
 Give yourself a universim custom item using its ```universimId```.
 
-### id
+### /universim id
 
-> Usage: /universim id <get|remove|set <universimId>>
+> Usage: /universim id <get|remove|set \<universimId\>>
 
 Gets, removes or sets the universim id of the held item.
 
-### showmeta
+### /universim showmeta
 
 > Usage: /universim showmeta
 
