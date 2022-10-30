@@ -1,0 +1,14 @@
+name: Universim
+version: '${project.version}'
+main: com.obeeron.universim.Universim
+api-version: 1.16
+prefix: UVS
+load: STARTUP
+authors: [ Obeeron ]
+description: Addons for Universim RP Server
+
+commands:
+  universim:
+    description: Universim staff commands
+    usage: /universim <reload | give | id | showmeta>
+    aliases: [uvs, univ]
