@@ -1,5 +1,6 @@
-package com.obeeron.universim.craft;
+package com.obeeron.universim.modules.recipes;
 
+import com.obeeron.universim.UVSCore;
 import com.obeeron.universim.Universim;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.*;
@@ -45,7 +46,7 @@ public class RecipeHasher {
     public static int hashShapelessCraftInventory(CraftingInventory inventory) {
         HashMap<NamespacedKey, Integer> ingredientMap = new HashMap<>();
         for (ItemStack ingredient : inventory.getMatrix()) {
-            NamespacedKey ingredientId = CraftManager.getInstance().getIngredientNSK(ingredient);
+            NamespacedKey ingredientId = UVSCore.getItemId(ingredient);
             if (ingredientId == null) continue;
             ingredientMap.put(ingredientId, ingredientMap.getOrDefault(ingredientId, 0) + 1);
         }
@@ -92,7 +93,7 @@ public class RecipeHasher {
         NamespacedKey[][] ingredientMatrix = new NamespacedKey[matrixHeight][matrixWidth];
         for (int i = matrixMinX; i <= matrixMaxX; i++) {
             for (int j = matrixMinY; j <= matrixMaxY; j++) {
-                ingredientMatrix[j-matrixMinY][i-matrixMinX] = CraftManager.getInstance().getIngredientNSK(matrix[j*matrixSide+i]);
+                ingredientMatrix[j-matrixMinY][i-matrixMinX] = UVSCore.getItemId(matrix[j*matrixSide+i]);
             }
         }
 

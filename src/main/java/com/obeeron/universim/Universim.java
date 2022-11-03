@@ -1,9 +1,10 @@
 package com.obeeron.universim;
 
-import com.obeeron.universim.common.UnivItemManager;
+import com.obeeron.universim.modules.itemHolder.ItemHolderManager;
+import com.obeeron.universim.modules.universimItems.UnivItemManager;
 import com.obeeron.universim.commands.UniversimCommand;
 import com.obeeron.universim.config.ConfigManager;
-import com.obeeron.universim.craft.CraftManager;
+import com.obeeron.universim.modules.recipes.CraftManager;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -34,6 +35,7 @@ public final class Universim extends JavaPlugin {
 
         UnivItemManager.initialize();
         CraftManager.initialize();
+        ItemHolderManager.initialize();
 
         registerCommands();
 

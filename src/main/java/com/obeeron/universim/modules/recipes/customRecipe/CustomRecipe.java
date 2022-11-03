@@ -1,6 +1,6 @@
-package com.obeeron.universim.craft.customRecipe;
+package com.obeeron.universim.modules.recipes.customRecipe;
 
-import com.obeeron.universim.craft.exceptions.CustomRecipeParsingException;
+import com.obeeron.universim.modules.recipes.exceptions.CustomRecipeParsingException;
 import org.bukkit.Keyed;
 import org.bukkit.inventory.Recipe;
 

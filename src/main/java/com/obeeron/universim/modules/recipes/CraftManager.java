@@ -1,17 +1,16 @@
-package com.obeeron.universim.craft;
+package com.obeeron.universim.modules.recipes;
 
 import com.obeeron.universim.UVSCore;
 import com.obeeron.universim.Universim;
 import com.obeeron.universim.config.Config;
 import com.obeeron.universim.config.ConfigManager;
-import com.obeeron.universim.craft.exceptions.CustomRecipeParsingException;
-import com.obeeron.universim.craft.factory.CustomRecipeFactory;
-import com.obeeron.universim.craft.factory.ShapelessCustomRecipeFactory;
-import com.obeeron.universim.craft.customRecipe.CustomRecipe;
-import com.obeeron.universim.craft.factory.ShapedCustomRecipeFactory;
-import com.obeeron.universim.craft.listeners.CustomRecipeListener;
+import com.obeeron.universim.modules.recipes.exceptions.CustomRecipeParsingException;
+import com.obeeron.universim.modules.recipes.factory.CustomRecipeFactory;
+import com.obeeron.universim.modules.recipes.factory.ShapelessCustomRecipeFactory;
+import com.obeeron.universim.modules.recipes.listeners.CustomRecipeListener;
+import com.obeeron.universim.modules.recipes.customRecipe.CustomRecipe;
+import com.obeeron.universim.modules.recipes.factory.ShapedCustomRecipeFactory;
 import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
@@ -118,18 +117,10 @@ public class CraftManager {
     }
 
     // If the ingredient has an universim id, return it, otherwise return its minecraft NamespacedKey
-    public NamespacedKey getIngredientNSK(ItemStack ingredient) {
-        if (ingredient == null) return null;
-        NamespacedKey ingredientId = UVSCore.getUnivId(ingredient);
-        if (ingredientId == null)
-            ingredientId = ingredient.getType().getKey();
-        return ingredientId;
-    }
-
     private boolean containsUnivIngredients(ItemStack[] matrix) {
         for (ItemStack itemStack : matrix) {
             if (itemStack == null) continue;
-            if (getIngredientNSK(itemStack).getNamespace().equals(Universim.getNamespace())) return true;
+            if (UVSCore.getItemId(itemStack).getNamespace().equals(Universim.getNamespace())) return true;
         }
         return false;
     }

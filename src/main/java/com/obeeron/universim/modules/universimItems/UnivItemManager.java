@@ -1,4 +1,4 @@
-package com.obeeron.universim.common;
+package com.obeeron.universim.modules.universimItems;
 
 import com.obeeron.universim.Universim;
 import com.obeeron.universim.config.Config;
@@ -35,7 +35,7 @@ public class UnivItemManager {
     // GETTERS
 
     public ItemStack getUnivItem(NamespacedKey resultNSK) {
-        return univItems.get(resultNSK);
+        return univItems.get(resultNSK).clone();
     }
 
     @Nullable

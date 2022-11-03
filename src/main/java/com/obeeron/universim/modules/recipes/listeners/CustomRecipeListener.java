@@ -1,6 +1,6 @@
-package com.obeeron.universim.craft.listeners;
+package com.obeeron.universim.modules.recipes.listeners;
 
-import com.obeeron.universim.craft.CraftManager;
+import com.obeeron.universim.modules.recipes.CraftManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;

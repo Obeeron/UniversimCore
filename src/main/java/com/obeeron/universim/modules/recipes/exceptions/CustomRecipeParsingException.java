@@ -1,4 +1,4 @@
-package com.obeeron.universim.craft.exceptions;
+package com.obeeron.universim.modules.recipes.exceptions;
 
 // Exception class for ConfigurationSection parsing
 public class CustomRecipeParsingException extends Exception {

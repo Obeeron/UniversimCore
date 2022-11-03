@@ -3,7 +3,7 @@ package com.obeeron.universim.commands;
 import com.google.common.base.Preconditions;
 import com.obeeron.universim.UVSCore;
 import com.obeeron.universim.Universim;
-import com.obeeron.universim.common.UnivItemManager;
+import com.obeeron.universim.modules.universimItems.UnivItemManager;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.*;
@@ -90,7 +90,6 @@ public class UniversimCommand implements TabExecutor {
             sender.sendMessage(ChatColor.RED+"Invalid univ_id\n"+usage);
             return;
         }
-        item = item.clone();
 
         if (args.length == 2) {
             try {
@@ -127,39 +126,47 @@ public class UniversimCommand implements TabExecutor {
             return;
         }
 
+        String subCommand = args[0];
+        String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
+        switch (subCommand) {
+            case "get" -> getUnivId(player, subArgs);
+            case "remove" -> removeUnivId(player, subArgs);
+            case "set" -> setUnivId(player, subArgs);
+            default -> player.sendMessage(usage);
+        }
+    }
+
+    private void getUnivId(Player player, String[] args) {
+        if (args.length != 0) {
+            player.sendMessage(ChatColor.RED + "Usage: /universim id get");
+            return;
+        }
+
         ItemStack item = player.getInventory().getItemInMainHand();
         if (item.getType().isAir()) {
             player.sendMessage(ChatColor.RED+"You must be holding an item to use this command.");
             return;
         }
 
-        String subCommand = args[0];
-        String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
-        switch (subCommand) {
-            case "get" -> getUnivId(player, item, subArgs);
-            case "remove" -> removeUnivId(player, item, subArgs);
-            case "set" -> setUnivId(player, item, subArgs);
-            default -> player.sendMessage(usage);
-        }
-    }
-
-    private void getUnivId(Player player, ItemStack item, String[] args) {
-        if (args.length != 0) {
-            player.sendMessage(ChatColor.RED + "Usage: /universim id get");
-            return;
-        }
-        NamespacedKey nsk = UVSCore.getUnivId(item);
+        NamespacedKey nsk = UVSCore.getItemId(item);
         if (nsk == null)
             player.sendMessage("This item doesn't have an Universim ID.");
         else
             player.sendMessage(ChatColor.GREEN+"Universim ID: "+ChatColor.ITALIC+nsk.getKey());
     }
 
-    private void removeUnivId(Player player, ItemStack item, String[] args) {
+    private void removeUnivId(Player player, String[] args) {
         if (args.length != 0) {
             player.sendMessage(ChatColor.RED + "Usage: /universim id remove");
             return;
         }
+
+        ItemStack item = player.getInventory().getItemInMainHand();
+        if (item.getType().isAir()) {
+            player.sendMessage(ChatColor.RED+"You must be holding an item to use this command.");
+            return;
+        }
+
         NamespacedKey nsk = UVSCore.getUnivId(item);
         if (nsk == null){
             player.sendMessage("This item doesn't have an Universim ID.");
@@ -169,11 +176,18 @@ public class UniversimCommand implements TabExecutor {
         player.sendMessage(ChatColor.GREEN + "Universim ID " + ChatColor.ITALIC + nsk.getKey() + ChatColor.GREEN + " removed.");
     }
 
-    private void setUnivId(Player player, ItemStack item, String[] args) {
+    private void setUnivId(Player player, String[] args) {
         if (args.length != 1 || args[0] == null) {
             player.sendMessage(ChatColor.RED + "Usage: /universim id set <univ_id>");
             return;
         }
+
+        ItemStack item = player.getInventory().getItemInMainHand();
+        if (item.getType().isAir()) {
+            player.sendMessage(ChatColor.RED+"You must be holding an item to use this command.");
+            return;
+        }
+
         String univId = args[0];
         UVSCore.setUnivId(item, univId);
         player.sendMessage(ChatColor.GREEN + "Universim ID set to " + ChatColor.ITALIC + args[0] + ChatColor.GREEN + " .");

@@ -1,11 +1,15 @@
 package com.obeeron.universim;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataHolder;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 public class UVSCore {
 
@@ -13,6 +17,19 @@ public class UVSCore {
         if (key == null)
             return null;
         return new NamespacedKey(Universim.getInstance(), key.toLowerCase());
+    }
+
+    // Return the universim nsk if it has one or the material nsk if it doesn't
+    public static NamespacedKey getItemId(ItemStack item) {
+        if (item == null)
+            return null;
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null){
+            NamespacedKey nsk = univNSK(item.getItemMeta().getPersistentDataContainer().get(univNSK("id"), PersistentDataType.STRING));
+            if (nsk != null)
+                return nsk;
+        }
+        return item.getType().getKey();
     }
 
     @Nullable
@@ -25,14 +42,14 @@ public class UVSCore {
         return univNSK(meta.getPersistentDataContainer().get(univNSK("id"), PersistentDataType.STRING));
     }
 
-    public static void setUnivId(ItemMeta meta, String univ_id) {
-        meta.getPersistentDataContainer().set(univNSK("id"), PersistentDataType.STRING, univ_id);
+    public static void setUnivId(PersistentDataHolder dataHolder, String univ_id) {
+        dataHolder.getPersistentDataContainer().set(univNSK("id"), PersistentDataType.STRING, univ_id);
     }
 
     public static void setUnivId(ItemStack item, String univ_id) {
         ItemMeta meta = item.getItemMeta();
-        assert meta != null;
-        setUnivId(meta, univ_id);
+        meta = Bukkit.getItemFactory().getItemMeta(item.getType());
+        setUnivId(Objects.requireNonNull(meta), univ_id);
         item.setItemMeta(meta);
     }
 
@@ -58,5 +75,16 @@ public class UVSCore {
         if (minecraftMaterial != null)
             return minecraftMaterial.getKey();
         return UVSCore.univNSK(str);
+    }
+
+    public static boolean hasUnivId(PersistentDataHolder dataHolder, String key) {
+        if (dataHolder == null)
+            return false;
+        return dataHolder.getPersistentDataContainer().has(univNSK("id"), PersistentDataType.STRING) &&
+                Objects.equals(dataHolder.getPersistentDataContainer().get(univNSK("id"), PersistentDataType.STRING), key);
+    }
+
+    public static int getCustomModelDataHash(NamespacedKey nsk) {
+        return nsk.toString().hashCode();
     }
 }

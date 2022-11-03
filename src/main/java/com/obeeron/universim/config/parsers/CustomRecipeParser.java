@@ -2,8 +2,8 @@ package com.obeeron.universim.config.parsers;
 
 import com.obeeron.universim.UVSCore;
 import com.obeeron.universim.Universim;
-import com.obeeron.universim.common.UnivItemManager;
-import com.obeeron.universim.craft.exceptions.CustomRecipeParsingException;
+import com.obeeron.universim.modules.universimItems.UnivItemManager;
+import com.obeeron.universim.modules.recipes.exceptions.CustomRecipeParsingException;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
