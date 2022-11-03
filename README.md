@@ -10,6 +10,8 @@ Core plugin for Universim Minecraft RP server (1.16.5)
   - Craft Manager
     - Add new recipes combining vanilla and or custom items
   - Recipes description stored in configuration file ```customRecipes.yml```
+- ItemHolder : universim:item_holder
+  - Custom item frame that turns invisible when containing an item
 - **Commands**
   - ```/universim``` command for staff
 
