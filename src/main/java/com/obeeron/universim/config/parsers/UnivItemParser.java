@@ -4,6 +4,10 @@ import com.obeeron.universim.UVSCore;
 import com.obeeron.universim.Universim;
 import com.obeeron.universim.modules.universimItems.UnivItemManager;
 import com.obeeron.universim.modules.recipes.exceptions.CustomRecipeParsingException;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -72,8 +76,9 @@ public class UnivItemParser {
             result.setItemMeta(newMeta);
         }
         ItemMeta meta = result.getItemMeta();
-        if (meta!= null && !meta.hasDisplayName())
-            meta.setDisplayName(ChatColor.RESET + WordUtils.capitalizeFully(univId.toLowerCase().replace("_", " ")));
+        if (!meta.hasDisplayName()){
+            meta.displayName(Component.text(WordUtils.capitalizeFully(univId.toLowerCase().replace("_", " "))).decoration(TextDecoration.ITALIC,false));
+        }
         result.setItemMeta(meta);
 
         UVSCore.setUnivId(result, univId);
@@ -102,12 +107,10 @@ public class UnivItemParser {
     public static ItemMeta parseItemMeta(ConfigurationSection metaSection, ItemStack itemStack) throws CustomRecipeParsingException {
         // Get the meta of the result
         ItemMeta resultBaseMeta = itemStack.getItemMeta();
-        if (resultBaseMeta == null)
-            resultBaseMeta = Bukkit.getItemFactory().getItemMeta(itemStack.getType());
 
         try {
             // Get the meta-map of the result
-            HashMap<String, Object> resultMetaMap = new HashMap<>(Objects.requireNonNull(resultBaseMeta).serialize());
+            HashMap<String, Object> resultMetaMap = new HashMap<>(resultBaseMeta.serialize());
 
             // Get the meta-map to add
             Map<String, Object> metaMap = configurationSectionToMap(metaSection);
@@ -118,7 +121,8 @@ public class UnivItemParser {
             // Deserialize and set the result meta
             ItemMeta resultMeta = (ItemMeta) ConfigurationSerialization.deserializeObject(resultMetaMap);
             if (resultMeta != null && resultMeta.hasDisplayName())
-                resultMeta.setDisplayName(ChatColor.RESET + resultMeta.getDisplayName());
+                resultMeta.displayName(Objects.requireNonNull(resultMeta.displayName()).decoration(TextDecoration.ITALIC,false));
+
             return resultMeta;
         } catch (Exception e) {
             e.printStackTrace();

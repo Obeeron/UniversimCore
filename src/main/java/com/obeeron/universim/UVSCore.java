@@ -48,8 +48,7 @@ public class UVSCore {
 
     public static void setUnivId(ItemStack item, String univ_id) {
         ItemMeta meta = item.getItemMeta();
-        meta = Bukkit.getItemFactory().getItemMeta(item.getType());
-        setUnivId(Objects.requireNonNull(meta), univ_id);
+        setUnivId(meta, univ_id);
         item.setItemMeta(meta);
     }
 
