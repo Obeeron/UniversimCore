@@ -11,7 +11,6 @@ import org.bukkit.World;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.persistence.PersistentDataHolder;
 
 public class ItemHolderManager {
