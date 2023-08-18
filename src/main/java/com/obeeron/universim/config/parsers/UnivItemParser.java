@@ -6,7 +6,7 @@ import com.obeeron.universim.modules.universimItems.UnivItemManager;
 import com.obeeron.universim.modules.recipes.exceptions.CustomRecipeParsingException;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
-import org.apache.commons.lang3.text.WordUtils;
+import org.apache.commons.text.WordUtils;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
