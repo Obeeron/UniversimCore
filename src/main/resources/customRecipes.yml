@@ -1,5 +1,13 @@
 # Shaped recipes
 shaped:
+  item_holder:
+    shape:
+      - "sss"
+      - "sGs"
+      - "sss"
+    ingredients:
+      s: stick
+      G: glass
 
 # Shapeless recipes
 shapeless:

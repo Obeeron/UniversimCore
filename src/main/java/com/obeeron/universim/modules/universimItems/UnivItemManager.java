@@ -35,7 +35,7 @@ public class UnivItemManager {
     // GETTERS
 
     public ItemStack getUnivItem(NamespacedKey resultNSK) {
-        return univItems.get(resultNSK).clone();
+        return univItems.get(resultNSK);
     }
 
     @Nullable

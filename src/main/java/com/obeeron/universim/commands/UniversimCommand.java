@@ -34,7 +34,7 @@ public class UniversimCommand implements TabExecutor {
 
     private void universimCommand(CommandSender sender, org.bukkit.command.Command command, String[] args) {
         if (args.length < 1) {
-            sender.sendMessage(ChatColor.RED+"Usage: "+command.getUsage());
+            sender.sendMessage(ChatColor.RED+"Usage: " + command.getUsage());
             return;
         }
 
@@ -45,16 +45,16 @@ public class UniversimCommand implements TabExecutor {
             case "give" -> univGiveCommand(sender, subArgs);
             case "id" -> idCommand(sender, subArgs);
             case "showmeta" -> metaCommand(sender, subArgs);
-            default -> sender.sendMessage(ChatColor.RED+"Usage: "+command.getUsage());
+            default -> sender.sendMessage(ChatColor.RED + "Usage: " + command.getUsage());
         }
     }
 
     private void univReloadCommand(CommandSender sender, String[] args) {
         boolean isPlayer = sender instanceof org.bukkit.entity.Player;
-        String usage = ChatColor.RED +"Usage: /universim reload";
+        String usage = ChatColor.RED + "Usage: /universim reload";
 
         if (isPlayer && !sender.hasPermission(Universim.PERM_RELOAD)) {
-            sender.sendMessage(ChatColor.RED+"Permission denied. This incident will be reported.");
+            sender.sendMessage(ChatColor.RED + "Permission denied. This incident will be reported.");
             return;
         }
         if (args.length != 0) {
@@ -64,15 +64,15 @@ public class UniversimCommand implements TabExecutor {
 
         Universim.getInstance().reload();
         if (isPlayer)
-            sender.sendMessage(ChatColor.GREEN+"Universim reloaded!");
+            sender.sendMessage(ChatColor.GREEN + "Universim reloaded!");
     }
 
     private void univGiveCommand(CommandSender sender, String[] args) {
         if (!(sender instanceof org.bukkit.entity.Player)){
-            sender.sendMessage(ChatColor.RED+"This command can only be used by players.");
+            sender.sendMessage(ChatColor.RED + "This command can only be used by players.");
             return;
         }
-        String usage = ChatColor.RED +"Usage: /universim give <univ_id> [amount]";
+        String usage = ChatColor.RED + "Usage: /universim give <univ_id> [amount]";
 
         if (!sender.hasPermission(Universim.PERM_GIVE)) {
             sender.sendMessage(ChatColor.RED + "Permission denied. This incident will be reported.");
@@ -87,7 +87,7 @@ public class UniversimCommand implements TabExecutor {
         String univId = args[0];
         ItemStack item = UnivItemManager.getInstance().getUnivItem(UVSCore.univNSK(univId));
         if (item == null) {
-            sender.sendMessage(ChatColor.RED+"Invalid univ_id\n"+usage);
+            sender.sendMessage(ChatColor.RED + "Invalid univ_id: " + univId + "\n");
             return;
         }
 
@@ -98,23 +98,23 @@ public class UniversimCommand implements TabExecutor {
                 Preconditions.checkArgument(amount>0);
                 item.setAmount(amount);
             } catch (IllegalArgumentException e) {
-                sender.sendMessage(ChatColor.RED+"Invalid amount\n"+usage);
+                sender.sendMessage(ChatColor.RED + "Invalid amount\n" + usage);
                 return;
             }
         }
 
         if (!((Player) sender).getInventory().addItem(item).isEmpty()) {
-            sender.sendMessage(ChatColor.RED+"Inventory full!");
+            sender.sendMessage(ChatColor.RED + "Inventory full!");
         }
     }
 
     private void idCommand(CommandSender sender, String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage(ChatColor.RED+"This command can only be used by players.");
+            sender.sendMessage(ChatColor.RED + "This command can only be used by players.");
             return;
         }
 
-        String usage = ChatColor.RED +"Usage: /universim id <get|remove|set>";
+        String usage = ChatColor.RED + "Usage: /universim id <get|remove|set>";
 
         if (!player.hasPermission(Universim.PERM_MANAGE_UNIVID)) {
             sender.sendMessage("§cPermission denied. This incident will be reported.");
@@ -144,7 +144,7 @@ public class UniversimCommand implements TabExecutor {
 
         ItemStack item = player.getInventory().getItemInMainHand();
         if (item.getType().isAir()) {
-            player.sendMessage(ChatColor.RED+"You must be holding an item to use this command.");
+            player.sendMessage(ChatColor.RED + "You must be holding an item to use this command.");
             return;
         }
 
@@ -152,7 +152,7 @@ public class UniversimCommand implements TabExecutor {
         if (nsk == null)
             player.sendMessage("This item doesn't have an Universim ID.");
         else
-            player.sendMessage(ChatColor.GREEN+"Universim ID: "+ChatColor.ITALIC+nsk.getKey());
+            player.sendMessage(ChatColor.GREEN + "Universim ID: " + ChatColor.ITALIC + nsk.getKey());
     }
 
     private void removeUnivId(Player player, String[] args) {
@@ -163,7 +163,7 @@ public class UniversimCommand implements TabExecutor {
 
         ItemStack item = player.getInventory().getItemInMainHand();
         if (item.getType().isAir()) {
-            player.sendMessage(ChatColor.RED+"You must be holding an item to use this command.");
+            player.sendMessage(ChatColor.RED + "You must be holding an item to use this command.");
             return;
         }
 
@@ -195,14 +195,14 @@ public class UniversimCommand implements TabExecutor {
 
     private void metaCommand(CommandSender sender, String[] subArgs) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage(ChatColor.RED+"This command can only be used by players.");
+            sender.sendMessage(ChatColor.RED + "This command can only be used by players.");
             return;
         }
 
-        String usage = ChatColor.RED +"Usage: /universim showmeta";
+        String usage = ChatColor.RED + "Usage: /universim showmeta";
 
         if (!player.hasPermission(Universim.PERM_SHOWMETA)) {
-            sender.sendMessage(ChatColor.RED+"Permission denied. This incident will be reported.");
+            sender.sendMessage(ChatColor.RED + "Permission denied. This incident will be reported.");
             return;
         }
 
@@ -213,17 +213,17 @@ public class UniversimCommand implements TabExecutor {
 
         ItemStack item = player.getInventory().getItemInMainHand();
         if (item.getType().isAir()) {
-            player.sendMessage(ChatColor.RED+"You must be holding an item to use this command.");
+            player.sendMessage(ChatColor.RED + "You must be holding an item to use this command.");
             return;
         }
 
         ItemMeta meta = item.getItemMeta();
         if (meta == null) {
-            player.sendMessage(ChatColor.RED+"This item doesn't have any meta.");
+            player.sendMessage(ChatColor.RED + "This item doesn't have any meta.");
             return;
         }
 
-        player.sendMessage(ChatColor.GREEN+"Item meta:\n"+meta.serialize());
+        player.sendMessage(ChatColor.GREEN + "Item meta:\n" + meta.serialize());
     }
 
     @Nullable
