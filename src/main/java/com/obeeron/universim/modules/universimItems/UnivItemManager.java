@@ -35,7 +35,13 @@ public class UnivItemManager {
     // GETTERS
 
     public ItemStack getUnivItem(NamespacedKey resultNSK) {
-        return univItems.get(resultNSK);
+        ItemStack item = univItems.get(resultNSK);
+        if (item != null) {
+            return item.clone();
+        } else {
+            Universim.getInstance().getLogger().warning("Cannot found item " + resultNSK.asString());
+            return new ItemStack(Material.AIR, 0);
+        }
     }
 
     @Nullable
