@@ -2,11 +2,16 @@ package com.obeeron.universim.modules.recipes;
 
 import com.obeeron.universim.UVSCore;
 import com.obeeron.universim.Universim;
+
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.*;
+import org.bukkit.inventory.RecipeChoice.ExactChoice;
+import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class RecipeHasher {
@@ -22,22 +27,37 @@ public class RecipeHasher {
 
     public static int hashIngredients(ShapelessRecipe shapelessRecipe) {
         HashMap<String, Integer> ingredientMap = new HashMap<>();
-        for (ItemStack ingredient : shapelessRecipe.getIngredientList()) {
-            String ingredientId = ingredient.getType().getKey().toString();
-            ingredientMap.put(ingredientId, ingredientMap.getOrDefault(ingredientId, 0) + 1);
+        for (RecipeChoice choice : shapelessRecipe.getChoiceList()) {
+            if (choice instanceof MaterialChoice) {
+                for (Material material : ((MaterialChoice)choice).getChoices()) {
+                    String materialId = material.getKey().toString();
+                    ingredientMap.put(materialId, ingredientMap.getOrDefault(materialId, 0) + 1);
+                }
+            } else if (choice instanceof ExactChoice) {
+                for (ItemStack ingredient : ((ExactChoice)choice).getChoices()) {
+                    String ingredientId = ingredient.getType().getKey().toString();
+                    ingredientMap.put(ingredientId, ingredientMap.getOrDefault(ingredientId, 0) + 1);
+                }
+            }
         }
         return ingredientMap.hashCode();
     }
 
-    private static int hashIngredients(ShapedRecipe shapedRecipe){
+    private static int hashIngredients(ShapedRecipe shapedRecipe) {
         String[] shape = shapedRecipe.getShape();
         String[][] ingredientMatrix = new String[shape.length][shape[0].length()];
-        Map<Character, ItemStack> ingredientMap = shapedRecipe.getIngredientMap();
+        Map<Character, RecipeChoice> ingredientMap = shapedRecipe.getChoiceMap();
 
         for (int i = 0; i < shape.length; i++) {
             for (int j = 0; j < shape[i].length(); j++) {
-                ItemStack ingredient = ingredientMap.get(shape[i].charAt(j));
-                ingredientMatrix[i][j] = ingredient == null ? null : ingredient.getType().getKey().toString();
+                RecipeChoice choice = ingredientMap.get(shape[i].charAt(j));
+                if (choice instanceof MaterialChoice) {
+                    List<Material> material = ((MaterialChoice)choice).getChoices();
+                    ingredientMatrix[i][j] = material.get(0).getKey().toString();
+                } else if (choice instanceof ExactChoice) {
+                    List<ItemStack> ingredient = ((ExactChoice)choice).getChoices();
+                    ingredientMatrix[i][j] += ingredient.get(0).getType().getKey().toString();
+                }
             }
         }
         return Arrays.deepHashCode(ingredientMatrix);
