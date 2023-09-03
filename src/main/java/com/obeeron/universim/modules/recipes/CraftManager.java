@@ -66,11 +66,12 @@ public class CraftManager {
                 registerRecipeSection(recipesConfig.getConfigurationSection(recipeType), customRecipeFactoryMap.get(recipeType));
                 customRecipeNb += 1;                
             }
-        Bukkit.getLogger().info("Loaded " + customRecipeNb + " recipe(s)");
+        Universim.getInstance().getLogger().info("Loaded " + customRecipeNb + " recipe(s)");
     }
 
     private void registerRecipeSection(ConfigurationSection section, CustomRecipeFactory customRecipeFactory) {
-        if (section == null) return;
+        if (section == null)
+            return;
 
         for (String recipeId: section.getKeys(false)) {
             CustomRecipe customRecipe;
@@ -93,9 +94,9 @@ public class CraftManager {
 
     public void registerCustomRecipe(CustomRecipe customRecipe) {
         // If the recipe does not override any vanilla recipe, register it to server
-        if (vanillaRecipesHashMap.get(RecipeHasher.hashIngredients(customRecipe)) == null)
+        if (vanillaRecipesHashMap.get(RecipeHasher.hashIngredients(customRecipe)) == null) {
             Universim.getInstance().getServer().addRecipe(customRecipe);
-
+        }
         customRecipesHashMap.put(customRecipe.hash(), customRecipe);
         plugin.getLogger().info("Registered custom recipe '" + customRecipe.getRecipeId() + "'");
     }
