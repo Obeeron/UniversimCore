@@ -60,9 +60,13 @@ public class CraftManager {
                 vanillaRecipesHashMap.put(RecipeHasher.hashIngredients(recipe), recipe);
         }
 
+        int customRecipeNb = 0;
         for (String recipeType : recipesConfig.getKeys(false))
-            if (this.customRecipeFactoryMap.containsKey(recipeType))
+            if (this.customRecipeFactoryMap.containsKey(recipeType)) {
                 registerRecipeSection(recipesConfig.getConfigurationSection(recipeType), customRecipeFactoryMap.get(recipeType));
+                customRecipeNb += 1;                
+            }
+        Bukkit.getLogger().info("Loaded " + customRecipeNb + " recipe(s)");
     }
 
     private void registerRecipeSection(ConfigurationSection section, CustomRecipeFactory customRecipeFactory) {

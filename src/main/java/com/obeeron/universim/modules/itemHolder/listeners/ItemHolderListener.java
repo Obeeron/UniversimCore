@@ -2,7 +2,6 @@ package com.obeeron.universim.modules.itemHolder.listeners;
 
 import com.obeeron.universim.UVSCore;
 import com.obeeron.universim.modules.itemHolder.ItemHolderManager;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
