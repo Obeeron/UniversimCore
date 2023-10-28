@@ -17,13 +17,17 @@ public class BoatListener implements Listener {
 
     @EventHandler
     public void onPlayerUse(PlayerInteractEvent event) {
-        if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-            EquipmentSlot hand = event.getHand();
-            if (hand != null && hand == EquipmentSlot.HAND) {
-                String key = UVSCore.getItemId(event.getItem()).asString();
-                if (key.contains("universim")) {
-                    waitingEvent.put(event.getPlayer().getUniqueId().toString(), key.split(":")[1]);
-                }
+        if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+            return;
+        }
+        EquipmentSlot hand = event.getHand();
+        if (hand == null || !event.hasItem()) {
+            return;
+        }
+        if (hand == EquipmentSlot.HAND) {
+            String key = UVSCore.getItemId(event.getItem()).asString();
+            if (key.contains("universim")) {
+                waitingEvent.put(event.getPlayer().getUniqueId().toString(), key.split(":")[1]);
             }
         }
     }
