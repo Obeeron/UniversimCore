@@ -38,14 +38,18 @@ public class BoatListener implements Listener {
         String playerId = event.getPlayer().getUniqueId().toString();
         if (event.getEntity() instanceof Entity boat) {
             if (waitingEvent.containsKey(playerId)) {
-                // this should be better way to do it, but bukkit nbt tags seems to not be client side
-                // so optifine cannot use them
-                // PersistentDataContainer pdc = boat.getPersistentDataContainer();
-                // NamespacedKey namespacedKey = new NamespacedKey("universim", "id");
-                // pdc.set(namespacedKey, PersistentDataType.STRING, "canoe");
+                String key = waitingEvent.get(playerId);
+                if (key.length() > 0) {
+                    // this should be better way to do it, but bukkit nbt tags seems to not be client side
+                    // so optifine cannot use them
+                    // PersistentDataContainer pdc = boat.getPersistentDataContainer();
+                    // NamespacedKey namespacedKey = new NamespacedKey("universim", "id");
+                    // pdc.set(namespacedKey, PersistentDataType.STRING, "canoe");
 
-                // using the name instead
-                boat.setCustomName("Canoe");
+                    // using the name instead
+                    String name = key.substring(key.lastIndexOf("_") + 1, key.length());
+                    boat.setCustomName(name);
+                }
                 waitingEvent.remove(playerId);
             }
         }
