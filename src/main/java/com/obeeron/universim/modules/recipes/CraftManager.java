@@ -20,10 +20,12 @@ import java.util.*;
 
 public class CraftManager {
 
-    private final Map<String, CustomRecipeFactory> customRecipeFactoryMap = new HashMap<>() {{
-        put("shaped", new ShapedCustomRecipeFactory());
-        put("shapeless", new ShapelessCustomRecipeFactory());
-    }};
+    private final Map<String, CustomRecipeFactory> customRecipeFactoryMap = new HashMap<>() {
+        {
+            put("shaped", new ShapedCustomRecipeFactory());
+            put("shapeless", new ShapelessCustomRecipeFactory());
+        }
+    };
 
     private static final CraftManager instance = new CraftManager();
 
@@ -45,10 +47,21 @@ public class CraftManager {
 
     public static void initialize() {
         Bukkit.getServer().getPluginManager().registerEvents(new CustomRecipeListener(), Universim.getInstance());
-        getInstance().loadRecipesFromConfig();
+        CraftManager instance = getInstance();
+        instance.reset();
+        instance.loadRecipesFromConfig();
     }
 
-    private void loadRecipesFromConfig(){
+    private void reset() {
+        if (!customRecipesHashMap.isEmpty()) {
+            for (CustomRecipe entry : customRecipesHashMap.values()) {
+                Universim.getInstance().getServer().removeRecipe(entry.getKey());
+            }
+            customRecipesHashMap.clear();
+        }
+    }
+
+    private void loadRecipesFromConfig() {
         // get 'customRecipes.yml' from config
         FileConfiguration recipesConfig = this.recipesConfig.getConfig();
 
@@ -60,36 +73,38 @@ public class CraftManager {
                 vanillaRecipesHashMap.put(RecipeHasher.hashIngredients(recipe), recipe);
         }
 
-        int customRecipeNb = 0;
         for (String recipeType : recipesConfig.getKeys(false))
             if (this.customRecipeFactoryMap.containsKey(recipeType)) {
-                registerRecipeSection(recipesConfig.getConfigurationSection(recipeType), customRecipeFactoryMap.get(recipeType));
-                customRecipeNb += 1;                
+                registerRecipeSection(recipesConfig.getConfigurationSection(recipeType),
+                        customRecipeFactoryMap.get(recipeType));
             }
-        Universim.getInstance().getLogger().info("Loaded " + customRecipeNb + " recipe(s)");
     }
 
     private void registerRecipeSection(ConfigurationSection section, CustomRecipeFactory customRecipeFactory) {
         if (section == null)
             return;
 
-        for (String recipeId: section.getKeys(false)) {
+        int customRecipeNb = 0;
+
+        for (String recipeId : section.getKeys(false)) {
             CustomRecipe customRecipe;
             try {
                 customRecipe = customRecipeFactory.create(section.getConfigurationSection(recipeId));
                 customRecipe.validate();
-            }
-            catch (CustomRecipeParsingException | IllegalArgumentException e) {
+            } catch (CustomRecipeParsingException | IllegalArgumentException e) {
                 plugin.getLogger().warning("Could not parse custom recipe '" + recipeId + "': " + e.getMessage());
                 continue;
             } catch (Exception e) {
-                plugin.getLogger().warning("Unknown error while parsing custom recipe '" + recipeId + "': " + e.getMessage());
+                plugin.getLogger()
+                        .warning("Unknown error while parsing custom recipe '" + recipeId + "': " + e.getMessage());
                 e.printStackTrace();
                 continue;
             }
 
             registerCustomRecipe(customRecipe);
+            customRecipeNb += 1;
         }
+        Universim.getInstance().getLogger().info("Loaded " + customRecipeNb + " recipe(s)");
     }
 
     public void registerCustomRecipe(CustomRecipe customRecipe) {
@@ -103,7 +118,8 @@ public class CraftManager {
 
     public void handlePrepareEvent(PrepareItemCraftEvent event) {
         // If the recipe crafting matrix is empty do nothing
-        if (Arrays.stream(event.getInventory().getMatrix()).allMatch(Objects::isNull)) return;
+        if (Arrays.stream(event.getInventory().getMatrix()).allMatch(Objects::isNull))
+            return;
 
         // Retrieve custom recipe
         CustomRecipe customRecipe = null;
@@ -116,16 +132,20 @@ public class CraftManager {
         // If the recipe is a custom recipe, set the result
         if (customRecipe != null)
             event.getInventory().setResult(customRecipe.getResult());
-        // Otherwise if it contains universim ingredients, set the result to null as it is not a valid recipe
+        // Otherwise if it contains universim ingredients, set the result to null as it
+        // is not a valid recipe
         else if (containsUnivIngredients(event.getInventory().getMatrix()))
             event.getInventory().setResult(null);
     }
 
-    // If the ingredient has an universim id, return it, otherwise return its minecraft NamespacedKey
+    // If the ingredient has an universim id, return it, otherwise return its
+    // minecraft NamespacedKey
     private boolean containsUnivIngredients(ItemStack[] matrix) {
         for (ItemStack itemStack : matrix) {
-            if (itemStack == null) continue;
-            if (UVSCore.getItemId(itemStack).getNamespace().equals(Universim.getNamespace())) return true;
+            if (itemStack == null)
+                continue;
+            if (UVSCore.getItemId(itemStack).getNamespace().equals(Universim.getNamespace()))
+                return true;
         }
         return false;
     }
