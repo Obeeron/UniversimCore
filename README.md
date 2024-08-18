@@ -5,6 +5,7 @@ Core plugin for Universim Minecraft RP server (1.16.5)
 
 - **Custom Item Manager**
   - Add new items with custom textures based on *optifine CIT* and *custom universim ids* stored as NBT
+  - support for custom boat (based on *optifine CEM*). Name of the custom item is copy to the boat entity
   - Items description stored in configuration file ```univItems.yml```
 - **Recipe Manager**
   - Craft Manager
