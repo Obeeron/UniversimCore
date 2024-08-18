@@ -35,6 +35,8 @@ public class CraftManager {
     private final Universim plugin;
     private final Config recipesConfig;
 
+    private int customRecipeNb = 0;
+
     private CraftManager() {
         this.plugin = Universim.getInstance();
         this.recipesConfig = ConfigManager.getInstance().getConfig("customRecipes.yml");
@@ -73,18 +75,18 @@ public class CraftManager {
                 vanillaRecipesHashMap.put(RecipeHasher.hashIngredients(recipe), recipe);
         }
 
+        customRecipeNb = 0;
         for (String recipeType : recipesConfig.getKeys(false))
             if (this.customRecipeFactoryMap.containsKey(recipeType)) {
                 registerRecipeSection(recipesConfig.getConfigurationSection(recipeType),
                         customRecipeFactoryMap.get(recipeType));
             }
+        Universim.getInstance().getLogger().info("Loaded " + customRecipeNb + " recipe(s)");
     }
 
     private void registerRecipeSection(ConfigurationSection section, CustomRecipeFactory customRecipeFactory) {
         if (section == null)
             return;
-
-        int customRecipeNb = 0;
 
         for (String recipeId : section.getKeys(false)) {
             CustomRecipe customRecipe;
@@ -104,7 +106,6 @@ public class CraftManager {
             registerCustomRecipe(customRecipe);
             customRecipeNb += 1;
         }
-        Universim.getInstance().getLogger().info("Loaded " + customRecipeNb + " recipe(s)");
     }
 
     public void registerCustomRecipe(CustomRecipe customRecipe) {
