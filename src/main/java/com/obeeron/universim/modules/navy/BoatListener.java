@@ -1,8 +1,10 @@
 package com.obeeron.universim.modules.navy;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Boat.Type;
 import org.bukkit.entity.Entity;
@@ -21,6 +23,11 @@ import com.obeeron.universim.modules.universimItems.UnivItemManager;
 
 public class BoatListener implements Listener {
     private HashMap<String, String> waitingEvent = new HashMap<String, String>(20);
+    private List<Material> boatMaterials = List.of(Material.OAK_BOAT, Material.DARK_OAK_BOAT, Material.BIRCH_BOAT, Material.ACACIA_BOAT, Material.JUNGLE_BOAT, Material.SPRUCE_BOAT);
+
+    private boolean isBoatItem(ItemStack item) {
+        return(boatMaterials.contains(item.getType()));
+    }
 
     @EventHandler
     public void onPlayerUse(PlayerInteractEvent event) {
@@ -32,13 +39,15 @@ public class BoatListener implements Listener {
             return;
         }
         if (hand == EquipmentSlot.HAND) {
-            String key = UVSCore.getItemId(event.getItem()).asString();
-            if (key.contains("universim")) {
-                waitingEvent.put(event.getPlayer().getUniqueId().toString(), key.split(":")[1]);
+            ItemStack item = event.getItem();
+            if (isBoatItem(item)) {
+                String key = UVSCore.getItemId(item).asString();
+                if (key.contains("universim")) {
+                    waitingEvent.put(event.getPlayer().getUniqueId().toString(), key.split(":")[1]);
+                }
             }
         }
     }
-
 
     @EventHandler
     public void onEntityPlace(EntityPlaceEvent event) {
