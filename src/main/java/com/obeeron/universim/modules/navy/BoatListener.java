@@ -23,10 +23,11 @@ import com.obeeron.universim.modules.universimItems.UnivItemManager;
 
 public class BoatListener implements Listener {
     private HashMap<String, String> waitingEvent = new HashMap<String, String>(20);
-    private List<Material> boatMaterials = List.of(Material.OAK_BOAT, Material.DARK_OAK_BOAT, Material.BIRCH_BOAT, Material.ACACIA_BOAT, Material.JUNGLE_BOAT, Material.SPRUCE_BOAT);
+    private List<Material> boatMaterials = List.of(Material.OAK_BOAT, Material.DARK_OAK_BOAT, Material.BIRCH_BOAT,
+            Material.ACACIA_BOAT, Material.JUNGLE_BOAT, Material.SPRUCE_BOAT);
 
     private boolean isBoatItem(ItemStack item) {
-        return(boatMaterials.contains(item.getType()));
+        return (boatMaterials.contains(item.getType()));
     }
 
     @EventHandler
@@ -56,7 +57,8 @@ public class BoatListener implements Listener {
             if (waitingEvent.containsKey(playerId)) {
                 String key = waitingEvent.get(playerId);
                 if (key.length() > 0) {
-                    // this should be better way to do it, but bukkit nbt tags seems to not be client side
+                    // this should be better way to do it, but bukkit nbt tags seems to not be
+                    // client side
                     // so optifine cannot use them
                     // PersistentDataContainer pdc = boat.getPersistentDataContainer();
                     // NamespacedKey namespacedKey = new NamespacedKey("universim", "id");
@@ -77,14 +79,17 @@ public class BoatListener implements Listener {
             return;
         }
         if (event.getVehicle().getType() == EntityType.BOAT) {
-            Boat boat = (Boat)event.getVehicle();
+            Boat boat = (Boat) event.getVehicle();
             Type type = boat.getBoatType();
-            String univId = type.toString().toLowerCase() + "_" + boat.getCustomName();
-            ItemStack item = UnivItemManager.getInstance().getUnivItem(UVSCore.univNSK(univId)); ;
-            Location loc1 = boat.getLocation();
-            loc1.getWorld().dropItem(loc1, item);
-            event.setCancelled(true);
-            boat.remove();
+            String name = boat.getCustomName();
+            if (name != null) {
+                String univId = type.toString().toLowerCase() + "_" + name;
+                ItemStack item = UnivItemManager.getInstance().getUnivItem(UVSCore.univNSK(univId), false);
+                Location loc1 = boat.getLocation();
+                loc1.getWorld().dropItem(loc1, item);
+                event.setCancelled(true);
+                boat.remove();
+            }
         }
     }
 }
