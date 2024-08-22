@@ -35,11 +35,17 @@ public class UnivItemManager {
     // GETTERS
 
     public ItemStack getUnivItem(NamespacedKey resultNSK) {
+        return getUnivItem(resultNSK, true);
+    }
+
+    public ItemStack getUnivItem(NamespacedKey resultNSK, boolean logsOnError) {
         ItemStack item = univItems.get(resultNSK);
         if (item != null) {
             return item.clone();
         } else {
-            Universim.getInstance().getLogger().warning("Cannot found item " + resultNSK.asString());
+            if (logsOnError) {
+                Universim.getInstance().getLogger().warning("Cannot found item " + resultNSK.asString());
+            }
             return new ItemStack(Material.AIR, 0);
         }
     }
@@ -48,7 +54,7 @@ public class UnivItemManager {
     public Material getMaterialFromNSK(NamespacedKey ingredientNSK) {
         if (ingredientNSK == null)
             return null;
-        if (ingredientNSK.getNamespace().equals(Universim.getNamespace())){
+        if (ingredientNSK.getNamespace().equals(Universim.getNamespace())) {
             ItemStack ingredient = getUnivItem(ingredientNSK);
             if (ingredient != null)
                 return ingredient.getType();
