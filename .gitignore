@@ -112,3 +112,6 @@ buildNumber.properties
 
 # Common working directory
 run/
+
+# Vscode related files
+.vscode/settings.json

@@ -1,6 +1,7 @@
 package com.obeeron.universim;
 
 import com.obeeron.universim.modules.itemHolder.ItemHolderManager;
+import com.obeeron.universim.modules.navy.BoatManager;
 import com.obeeron.universim.modules.universimItems.UnivItemManager;
 import com.obeeron.universim.commands.UniversimCommand;
 import com.obeeron.universim.config.ConfigManager;
@@ -36,6 +37,7 @@ public final class Universim extends JavaPlugin {
         UnivItemManager.initialize();
         CraftManager.initialize();
         ItemHolderManager.initialize();
+        BoatManager.initialize();
 
         registerCommands();
 
